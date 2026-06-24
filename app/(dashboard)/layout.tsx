@@ -16,6 +16,7 @@ import {
   Users,
   User,
 } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -29,7 +30,6 @@ export default function DashboardLayout({ children }: LayoutProps) {
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
 
-  
   useEffect(() => {
     const savedUser = localStorage.getItem("floodguard_user");
     if (savedUser) {
@@ -100,35 +100,9 @@ export default function DashboardLayout({ children }: LayoutProps) {
     return baseItems;
   };
 
-  // Only render after hydration to prevent loading flicker
-  if (!mounted) {
-    return (
-      <main className="min-h-screen bg-gray-50">
-        <div className="flex min-h-screen">
-          {/* Sidebar placeholder */}
-          <aside className="hidden w-72 shrink-0 border-r border-gray-200 bg-white px-6 py-6 lg:block shadow-sm" />
-          {/* Main content */}
-          <section className="flex min-w-0 flex-1 flex-col">
-            <header className="sticky top-0 z-10 border-b border-gray-200 bg-gradient-to-r from-blue-700 to-blue-900 shadow-md">
-              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between px-4 py-4 md:px-8">
-                <div>
-                  <h1 className="text-2xl md:text-3xl font-bold text-white">
-                    Loading...
-                  </h1>
-                </div>
-              </div>
-            </header>
-            <div className="flex-1 space-y-6 p-4 md:p-8">{children}</div>
-          </section>
-        </div>
-      </main>
-    );
-  }
-
   return (
     <main className="min-h-screen bg-gray-50">
       <div className="flex min-h-screen">
-        {/* Sidebar */}
         <aside className="hidden w-72 shrink-0 border-r border-gray-200 bg-white px-6 py-6 lg:block shadow-sm">
           {/* Logo */}
           <div className="flex items-center gap-3 mb-8">
@@ -141,7 +115,6 @@ export default function DashboardLayout({ children }: LayoutProps) {
             </div>
           </div>
 
-          {/* User Status */}
           {user ? (
             <div className="mb-6 rounded-lg bg-gradient-to-r from-blue-50 to-blue-100 p-3 border border-blue-200">
               <p className="text-xs text-gray-600 font-semibold">
@@ -229,12 +202,12 @@ function NavLink({
   href: string;
 }) {
   return (
-    <a
+    <Link
       href={href}
       className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-all"
     >
       {icon}
       {label}
-    </a>
+    </Link>
   );
 }
