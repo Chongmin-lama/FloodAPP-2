@@ -1,7 +1,29 @@
-import { Pool } from 'pg';
+import sql from 'mssql';
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/flood_db',
-});
+const config: sql.config = {
+  server: 'MSI',
+  database: 'FloodWatch',
+  user: 'sa',
+  password: 'a',
+  options: {
+    encrypt: false,
+    trustServerCertificate: true,
+  },
+};
 
-export default pool;
+let pool: sql.ConnectionPool | null = null;
+
+export async function getPool(): Promise<sql.ConnectionPool> {
+  if (!pool) {
+    try {
+      pool = await new sql.ConnectionPool(config).connect();
+      console.log('✅ Connected to FloodWatch');
+    } catch (err: any) {
+      console.error('❌ DB failed:', err.message);
+      throw err;
+    }
+  }
+  return pool;
+}
+
+export default sql;

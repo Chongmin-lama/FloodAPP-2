@@ -2,32 +2,44 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Lock, Mail, User } from "lucide-react";
+import { Lock, Mail } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
 
-    // Determine role based on email
-    let role = "citizen";
-    if (formData.email.includes("admin")) role = "admin";
-    else if (formData.email.includes("authority")) role = "authority";
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-    // Save user data to localStorage
-    const userData = {
-      name: formData.email.split("@")[0],
-      email: formData.email,
-      role: role,
-    };
-    localStorage.setItem("floodguard_user", JSON.stringify(userData));
+      console.log("Response status:", res.status);
+      const data = await res.json();
 
-    // Redirect to appropriate dashboard
-    if (role === "admin") router.push("/admin");
-    else if (role === "authority") router.push("/authority");
-    else router.push("/citizen");
+      console.log("Response data:", data);
+
+      if (!res.ok) {
+        setError(data.error || "Login failed");
+        return;
+      }
+      const role = data.user.role;
+      if (role === "admin") router.push("/admin");
+      else if (role === "authority") router.push("/authority");
+      else router.push("/citizen");
+    } catch (err) {
+      setError("Something went wrong. Try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -42,6 +54,12 @@ export default function LoginPage() {
         </div>
 
         <form onSubmit={handleLogin} className="p-8 space-y-6">
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-xl">
+              {error}
+            </div>
+          )}
+
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-2">
               Email Address
@@ -88,9 +106,10 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="w-full py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all transform active:scale-95 shadow-lg shadow-blue-200"
+            disabled={loading}
+            className="w-full py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all transform active:scale-95 shadow-lg shadow-blue-200 disabled:opacity-60"
           >
-            Sign In
+            {loading ? "Signing in..." : "Sign In"}
           </button>
 
           <div className="text-center">
@@ -100,6 +119,12 @@ export default function LoginPage() {
             >
               Don't have an account? Register here
             </a>
+          </div>
+
+          <div className="text-center text-xs text-slate-400 mt-2">
+            <p>Admin: admin@floodguard.com</p>
+            <p>Authority: authority@floodguard.com</p>
+            <p>Password: Admin@1234</p>
           </div>
         </form>
       </div>
