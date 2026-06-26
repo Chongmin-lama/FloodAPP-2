@@ -31,6 +31,9 @@ export default function LoginPage() {
         setError(data.error || "Login failed");
         return;
       }
+      localStorage.setItem("user_role", data.user.role);
+      localStorage.setItem("user_name", data.user.name);
+      localStorage.setItem("user_id", String(data.user.id));
       const role = data.user.role;
       if (role === "admin") router.push("/admin");
       else if (role === "authority") router.push("/authority");
@@ -124,7 +127,7 @@ export default function LoginPage() {
           <div className="text-center text-xs text-slate-400 mt-2">
             <p>Admin: admin@floodguard.com</p>
             <p>Authority: authority@floodguard.com</p>
-            <p>Password: Admin@1234</p>
+            <p>Password: pssword</p>
           </div>
         </form>
       </div>

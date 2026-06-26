@@ -17,7 +17,7 @@ import {
   User,
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type LayoutProps = {
@@ -27,17 +27,19 @@ type LayoutProps = {
 export default function DashboardLayout({ children }: LayoutProps) {
   const [user, setUser] = useState<any>(null);
   const [message, setMessage] = useState("");
-  const [mounted, setMounted] = useState(false);
+  const [role, setRole] = useState("");
   const router = useRouter();
 
   useEffect(() => {
-    const savedUser = localStorage.getItem("floodguard_user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-    setMounted(true);
-  }, []);
+    const role = localStorage.getItem("user_role");
+    const name = localStorage.getItem("user_name");
+    const id = localStorage.getItem("user_id");
 
+    if (role && name) {
+      setRole(role);
+      setUser({ role, name, id });
+    }
+  }, []);
   const logout = () => {
     setUser(null);
     localStorage.removeItem("floodguard_user");
@@ -64,7 +66,7 @@ export default function DashboardLayout({ children }: LayoutProps) {
       },
     ];
 
-    if (user.role === "citizen") {
+    if (role === "citizen") {
       return [
         ...baseItems,
         {
@@ -76,7 +78,7 @@ export default function DashboardLayout({ children }: LayoutProps) {
       ];
     }
 
-    if (user.role === "authority") {
+    if (role === "authority") {
       return [
         ...baseItems,
         {
@@ -88,7 +90,7 @@ export default function DashboardLayout({ children }: LayoutProps) {
       ];
     }
 
-    if (user.role === "admin") {
+    if (role === "admin") {
       return [
         ...baseItems,
         { icon: <Users size={18} />, label: "Users", href: "/admin" },
@@ -201,10 +203,18 @@ function NavLink({
   label: string;
   href: string;
 }) {
+  const pathname = usePathname();
+  const isActive = pathname === href;
+
   return (
     <Link
       href={href}
-      className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-all"
+      className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-semibold transition-all
+        ${
+          isActive
+            ? "bg-blue-600 text-white shadow-sm"
+            : "text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+        }`}
     >
       {icon}
       {label}
