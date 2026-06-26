@@ -22,10 +22,8 @@ export default function LoginPage() {
         body: JSON.stringify(formData),
       });
 
-      console.log("Response status:", res.status);
-      const data = await res.json();
 
-      console.log("Response data:", data);
+      const data = await res.json();
 
       if (!res.ok) {
         setError(data.error || "Login failed");

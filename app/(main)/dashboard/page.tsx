@@ -11,7 +11,7 @@ export default function DashboardPage() {
     async function fetchData() {
       try {
         const [reportsRes, alertsRes] = await Promise.all([
-          fetch("/api/reports"),
+          fetch("/api/report"),
           fetch("/api/alerts"),
         ]);
         const reportsData = await reportsRes.json();

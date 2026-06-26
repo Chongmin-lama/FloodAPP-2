@@ -113,7 +113,7 @@ export default function DashboardLayout({ children }: LayoutProps) {
             </div>
             <div>
               <p className="text-lg font-bold text-blue-900">FloodGuard</p>
-              <p className="text-xs text-gray-500">Command Center</p>
+              {/* <p className="text-xs text-gray-500">Command Center</p> */}
             </div>
           </div>
 
@@ -157,9 +157,9 @@ export default function DashboardLayout({ children }: LayoutProps) {
                 <h1 className="text-2xl md:text-3xl font-bold text-white">
                   Flood Incident System
                 </h1>
-                <p className="text-blue-100 text-sm">
+                {/* <p className="text-blue-100 text-sm">
                   Real-time reporting & response coordination
-                </p>
+                </p> */}
               </div>
               <div className="flex items-center gap-3">
                 {user && (

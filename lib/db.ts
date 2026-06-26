@@ -17,9 +17,9 @@ export async function getPool(): Promise<sql.ConnectionPool> {
   if (!pool) {
     try {
       pool = await new sql.ConnectionPool(config).connect();
-      console.log('✅ Connected to FloodWatch');
+      console.log('Connected to FloodWatch');
     } catch (err: any) {
-      console.error('❌ DB failed:', err.message);
+      console.error('DB failed:', err.message);
       throw err;
     }
   }
