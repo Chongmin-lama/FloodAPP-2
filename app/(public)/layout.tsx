@@ -5,10 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navLinks = [
-  { label: "Home",        href: "/"            },
-  { label: "View Alerts", href: "/public-view" },
-  { label: "View Map",    href: "/map"         },
-  { label: "Sign In",     href: "/login"       },
+  { label: "Home",         href: "/"            },
+  { label: "View Alerts",  href: "/public-view" },
+  { label: "View Map",     href: "/map"         },
+  { label: "Report Flood", href: "/report"      },
+  { label: "Sign In",      href: "/login"       },
 ];
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {

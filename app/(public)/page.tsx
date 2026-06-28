@@ -13,12 +13,17 @@ const severityConfig: Record<string, { bg: string; border: string; iconClass: st
 
 export default function HomePage() {
   const [alerts, setAlerts] = useState<any[]>([]);
-  const reports: any[] = []; // reports are auth-only, keep as empty for public
+  const [stats, setStats] = useState({ total: 0, pending: 0, resolved: 0, alerts: 0 });
+  const reports: any[] = [];
 
   useEffect(() => {
     fetch("/api/alerts")
       .then((r) => r.json())
       .then((d) => setAlerts(d.alerts ?? []));
+
+    fetch("/api/stats")
+      .then((r) => r.json())
+      .then((d) => setStats(d));
   }, []);
 
   return (
@@ -58,24 +63,24 @@ export default function HomePage() {
       <section className="bg-white border-b border-gray-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
-            <div className="bg-white rounded-lg p-4 shadow-sm">
-              <AlertTriangle className="mx-auto text-blue-600 mb-2" size={20} />
-              <p className="text-2xl font-bold text-blue-700">{alerts.length}</p>
+            <div className="p-4">
+              <Bell className="mx-auto text-blue-600 mb-2" size={20} />
+              <p className="text-2xl font-bold text-blue-700">{stats.alerts}</p>
               <p className="text-gray-500 text-sm">Active Alerts</p>
             </div>
-            <div className="bg-white rounded-lg p-4 shadow-sm">
+            <div className="p-4">
               <MapPin className="mx-auto text-orange-500 mb-2" size={20} />
-              <p className="text-2xl font-bold text-orange-500">{reports.filter(r => r.status === 'pending').length}</p>
+              <p className="text-2xl font-bold text-orange-500">{stats.pending}</p>
               <p className="text-gray-500 text-sm">Pending Reports</p>
             </div>
-            <div className="bg-white rounded-lg p-4 shadow-sm">
+            <div className="p-4">
               <Shield className="mx-auto text-green-600 mb-2" size={20} />
-              <p className="text-2xl font-bold text-green-600">{reports.filter(r => r.status === 'resolved').length}</p>
+              <p className="text-2xl font-bold text-green-600">{stats.resolved}</p>
               <p className="text-gray-500 text-sm">Resolved</p>
             </div>
-            <div className="bg-white rounded-lg p-4 shadow-sm">
+            <div className="p-4">
               <TrendingUp className="mx-auto text-gray-700 mb-2" size={20} />
-              <p className="text-2xl font-bold text-gray-700">{reports.length}</p>
+              <p className="text-2xl font-bold text-gray-700">{stats.total}</p>
               <p className="text-gray-500 text-sm">Total Reports</p>
             </div>
           </div>
