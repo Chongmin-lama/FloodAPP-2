@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getPool } from "@/lib/db";
+import bcrypt from "bcrypt";
 
 // PUT - change user role
 export async function PUT(
@@ -24,6 +25,31 @@ export async function PUT(
       .query("UPDATE users SET role = @role WHERE id = @id");
 
     return NextResponse.json({ message: "Role updated" });
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}
+
+// PATCH - reset password to default "floodwatch"
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: { id: string } },
+) {
+  try {
+    const role = req.cookies.get("user_role")?.value;
+    if (role !== "admin")
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+
+    const hashed = await bcrypt.hash("floodwatch", 10);
+
+    const pool = await getPool();
+    await pool
+      .request()
+      .input("id", parseInt(params.id))
+      .input("password", hashed)
+      .query("UPDATE users SET password = @password WHERE id = @id");
+
+    return NextResponse.json({ message: "Password reset to default" });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }

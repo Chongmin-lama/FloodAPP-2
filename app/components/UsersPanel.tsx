@@ -36,6 +36,13 @@ export default function UsersPanel() {
     else alert("Failed to delete");
   };
 
+  const handleResetPassword = async (id: number, name: string) => {
+    if (!confirm(`Reset "${name}"'s password to "floodwatch"?`)) return;
+    const res = await fetch(`/api/admin/users/${id}`, { method: "PATCH" });
+    if (res.ok) alert(`Password reset to "floodwatch" for ${name}`);
+    else alert("Failed to reset password");
+  };
+
   const roleBadge: any = {
     admin: "bg-purple-50 text-purple-700 ring-1 ring-purple-200",
     authority: "bg-blue-50 text-blue-700 ring-1 ring-blue-200",
@@ -87,6 +94,12 @@ export default function UsersPanel() {
                   <option value="authority">Authority</option>
                   <option value="admin">Admin</option>
                 </select>
+                <button
+                  onClick={() => handleResetPassword(user.id, user.name)}
+                  className="px-3 py-1 text-xs font-bold rounded-md bg-amber-50 text-amber-700 ring-1 ring-amber-200 hover:bg-amber-100"
+                >
+                  Reset Password
+                </button>
                 <button
                   onClick={() => handleDelete(user.id, user.name)}
                   className="px-3 py-1 text-xs font-bold rounded-md bg-red-50 text-red-700 ring-1 ring-red-200 hover:bg-red-100"

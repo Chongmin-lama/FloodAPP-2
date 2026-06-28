@@ -119,7 +119,7 @@ export default function ReportForm({ onSuccess }: ReportFormProps) {
         <button
           type="submit"
           disabled={submitting}
-          className="inline-flex items-center justify-center gap-2 mt-4 rounded-md px-4 py-2.5 text-sm font-bold bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60"
+          className="inline-flex items-center w-full justify-center gap-2 mt-4 rounded-md px-4 py-2.5 text-sm font-bold bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60"
         >
           <ClipboardListIcon size={17} />
           {submitting ? "Submitting..." : "Submit Report"}

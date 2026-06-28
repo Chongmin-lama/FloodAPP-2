@@ -1,20 +1,57 @@
 import { getPool } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
+// PATCH - authority/admin updates report status
+export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+    try {
+        const role = req.cookies.get('user_role')?.value;
+        if (role !== 'authority' && role !== 'admin')
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+
+        const { status } = await req.json();
+        const allowed = ['verified', 'responding', 'resolved', 'rejected'];
+        if (!allowed.includes(status))
+            return NextResponse.json({ error: 'Invalid status' }, { status: 400 });
+
+        const pool = await getPool();
+        const check = await pool.request()
+            .input('id', parseInt(params.id))
+            .query('SELECT id FROM reports WHERE id = @id');
+
+        if (check.recordset.length === 0)
+            return NextResponse.json({ error: 'Report not found' }, { status: 404 });
+
+        await pool.request()
+            .input('id', parseInt(params.id))
+            .input('status', status)
+            .query('UPDATE reports SET status = @status WHERE id = @id');
+
+        return NextResponse.json({ message: 'Status updated' });
+    } catch (err: any) {
+        return NextResponse.json({ error: err.message }, { status: 500 });
+    }
+}
+
 // DELETE - delete a report (only if pending)
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
     try {
         const userId = req.cookies.get('user_id')?.value;
+        const role = req.cookies.get('user_role')?.value;
         if (!userId)
             return NextResponse.json({ error: 'Not logged in' }, { status: 401 });
 
         const pool = await getPool();
 
-        // Make sure report belongs to user and is still pending
+        const isPrivileged = role === 'admin' || role === 'authority';
+
         const check = await pool.request()
             .input('id', parseInt(params.id))
             .input('user_id', parseInt(userId))
-            .query('SELECT id, status FROM reports WHERE id = @id AND user_id = @user_id');
+            .query(
+                isPrivileged
+                    ? 'SELECT id, status FROM reports WHERE id = @id'
+                    : 'SELECT id, status FROM reports WHERE id = @id AND user_id = @user_id'
+            );
 
         if (check.recordset.length === 0)
             return NextResponse.json({ error: 'Report not found' }, { status: 404 });
@@ -37,6 +74,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
     try {
         const userId = req.cookies.get('user_id')?.value;
+        const role = req.cookies.get('user_role')?.value;
         if (!userId)
             return NextResponse.json({ error: 'Not logged in' }, { status: 401 });
 
@@ -44,11 +82,17 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
         const pool = await getPool();
 
-        // Make sure report belongs to user and is still pending
+        // Admins/authority can edit any report; citizens can only edit their own
+        const isPrivileged = role === 'admin' || role === 'authority';
+
         const check = await pool.request()
             .input('id', parseInt(params.id))
             .input('user_id', parseInt(userId))
-            .query('SELECT id, status FROM reports WHERE id = @id AND user_id = @user_id');
+            .query(
+                isPrivileged
+                    ? 'SELECT id, status FROM reports WHERE id = @id'
+                    : 'SELECT id, status FROM reports WHERE id = @id AND user_id = @user_id'
+            );
 
         if (check.recordset.length === 0)
             return NextResponse.json({ error: 'Report not found' }, { status: 404 });
