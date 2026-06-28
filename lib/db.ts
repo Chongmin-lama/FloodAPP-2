@@ -1,13 +1,14 @@
-import sql from 'mssql';
+import sql from "mssql";
 
 const config: sql.config = {
-  server: 'MSI',
-  database: 'FloodWatch',
-  user: 'sa',
-  password: 'a',
+  server: process.env.DB_SERVER || "localhost",
+  database: process.env.DB_DATABASE || "FloodWatch",
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
   options: {
-    encrypt: false,
-    trustServerCertificate: true,
+    encrypt: process.env.DB_ENCRYPT === "true",
+    trustServerCertificate:
+      process.env.DB_TRUST_SERVER_CERTIFICATE === "true",
   },
 };
 
@@ -17,9 +18,9 @@ export async function getPool(): Promise<sql.ConnectionPool> {
   if (!pool) {
     try {
       pool = await new sql.ConnectionPool(config).connect();
-      console.log('Connected to FloodWatch');
+      console.log("Connected to SQL Server");
     } catch (err: any) {
-      console.error('DB failed:', err.message);
+      console.error("Database connection failed:", err.message);
       throw err;
     }
   }
