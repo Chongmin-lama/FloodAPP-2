@@ -174,13 +174,6 @@ export default function LoginPage() {
             </Link>
           </p>
 
-          {/* demo hint */}
-          <div className="mt-6 rounded-xl bg-slate-100 border border-slate-200 px-4 py-3 text-xs text-slate-500 space-y-0.5">
-            <p className="font-semibold text-slate-600 mb-1">Demo credentials</p>
-            <p>Admin: admin@floodguard.com</p>
-            <p>Authority: authority@floodguard.com</p>
-            <p>Password: pssword</p>
-          </div>
         </div>
       </div>
     </div>
