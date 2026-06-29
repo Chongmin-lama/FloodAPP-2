@@ -22,8 +22,8 @@ jobs:
           script: |
             cd ~/FloodAPP-2
 
-            git fetch origin
-            git reset --hard origin/main
+           git fetch origin
+           git reset --hard origin/master  
 
             npm install
 
