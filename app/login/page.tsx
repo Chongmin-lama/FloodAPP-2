@@ -28,9 +28,11 @@ export default function LoginPage() {
       localStorage.setItem("user_name", data.user.name);
       localStorage.setItem("user_id", String(data.user.id));
       const role = data.user.role;
-      if (role === "admin") router.push("/admin");
-      else if (role === "authority") router.push("/authority");
-      else router.push("/citizen");
+     if (['admin', 'authority', 'citizen'].includes(role)) {
+        router.push('/dashboard')
+      } else {
+        router.push('/')
+      }
     } catch {
       setError("Something went wrong. Try again.");
     } finally {

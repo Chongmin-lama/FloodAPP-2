@@ -23,6 +23,7 @@ export default function AlertsPage() {
   }, []);
 
   const canPublish = role === "authority" || role === "admin";
+  const canDelete  = role === "authority" || role === "admin";
 
   return (
     <div className="grid gap-6 xl:grid-cols-[1fr_1.4fr]">
@@ -32,7 +33,7 @@ export default function AlertsPage() {
         </div>
       )}
       <div className={canPublish ? "" : "xl:col-span-2"}>
-        <AlertsTable alerts={alerts} loading={loading} onRefresh={fetchAlerts} />
+        <AlertsTable alerts={alerts} loading={loading} onRefresh={fetchAlerts} canDelete={canDelete} />
       </div>
     </div>
   );

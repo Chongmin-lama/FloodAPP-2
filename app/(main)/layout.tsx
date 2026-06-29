@@ -15,6 +15,7 @@ import {
   RadioTower,
   Users,
   User,
+  UserCircle,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -40,10 +41,12 @@ export default function DashboardLayout({ children }: LayoutProps) {
       setUser({ role, name, id });
     }
   }, []);
-  const logout = () => {
+  const logout = async () => {
+    await fetch("/api/logout", { method: "POST" });
     setUser(null);
-    localStorage.removeItem("floodguard_user");
-    setMessage("Signed out.");
+    localStorage.removeItem("user_role");
+    localStorage.removeItem("user_name");
+    localStorage.removeItem("user_id");
     router.push("/");
   };
 
@@ -63,6 +66,11 @@ export default function DashboardLayout({ children }: LayoutProps) {
         icon: <LayoutDashboard size={18} />,
         label: "Dashboard",
         href: "/dashboard",
+      },
+      {
+        icon: <UserCircle size={18} />,
+        label: "Profile",
+        href: "/profile",
       },
     ];
 

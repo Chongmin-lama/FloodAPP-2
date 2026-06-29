@@ -1,5 +1,6 @@
 "use client";
 
+import ConfirmModal from "@/app/components/ConfirmModal";
 import { nepalDistricts } from "@/app/utils";
 import { useState } from "react";
 
@@ -17,12 +18,13 @@ export default function ReportsTable({
   onRefresh,
 }: ReportsTableProps) {
   const [editingReport, setEditingReport] = useState<any>(null);
+  const [deleteTarget, setDeleteTarget] = useState<any>(null);
 
-  const handleDelete = async (id: number) => {
-    if (!confirm("Delete this report?")) return;
-    const res = await fetch(`/api/report/${id}`, { method: "DELETE" });
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    const res = await fetch(`/api/report/${deleteTarget.id}`, { method: "DELETE" });
+    setDeleteTarget(null);
     if (res.ok) onRefresh();
-    else alert("Failed to delete");
   };
 
   const handleUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -59,6 +61,15 @@ export default function ReportsTable({
 
   return (
     <section className="rounded-md border border-slate-200 bg-white shadow-panel">
+      {deleteTarget && (
+        <ConfirmModal
+          title="Delete Report"
+          message={`Delete the report for "${deleteTarget.location}"? This cannot be undone.`}
+          confirmLabel="Delete"
+          onConfirm={handleDelete}
+          onCancel={() => setDeleteTarget(null)}
+        />
+      )}
       <div className="border-b border-slate-200 px-5 py-4">
         <h2 className="text-lg font-bold text-flood-navy">{title}</h2>
       </div>
@@ -244,7 +255,7 @@ export default function ReportsTable({
                           Edit
                         </button>
                         <button
-                          onClick={() => handleDelete(report.id)}
+                          onClick={() => setDeleteTarget(report)}
                           className="px-3 py-1 text-xs font-bold rounded-md bg-red-50 text-red-700 ring-1 ring-red-200 hover:bg-red-100"
                         >
                           Delete
