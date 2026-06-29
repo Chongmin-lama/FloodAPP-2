@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 
-// leaflet must be loaded client-side only
+
 const NepalMap = dynamic(() => import("@/app/components/NepalMap"), { ssr: false });
 
 const severityColor: Record<string, string> = {
@@ -69,16 +69,16 @@ export default function MapPage() {
       {/* Map */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {loading ? (
-          <div className="h-[600px] rounded-2xl bg-gray-100 animate-pulse flex items-center justify-center text-gray-400 text-sm">
+          <div className="h-[350px] sm:h-[500px] lg:h-[600px] rounded-2xl bg-gray-100 animate-pulse flex items-center justify-center text-gray-400 text-sm">
             Loading map...
           </div>
         ) : (
-          <div className="rounded-2xl overflow-hidden border border-gray-200 shadow-md h-[600px]">
+          <div className="relative rounded-2xl overflow-hidden border border-gray-200 shadow-md h-[350px] sm:h-[500px] lg:h-[600px]" style={{ zIndex: 0 }}>
             <NepalMap alerts={filtered} />
           </div>
         )}
 
-        {/* Summary strip */}
+
         <div className="mt-4 flex flex-wrap gap-4 text-sm text-gray-500">
           {["critical", "high", "medium", "low"].map((s) => (
             <span key={s} className="flex items-center gap-1.5">

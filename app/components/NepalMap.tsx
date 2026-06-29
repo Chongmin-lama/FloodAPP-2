@@ -121,18 +121,28 @@ interface Props {
 function getCoords(alert: any): [number, number] | null {
   if (alert.district && districtCoords[alert.district])
     return districtCoords[alert.district];
+  
+  // try case-insensitive match as fallback
+  if (alert.district) {
+    const key = Object.keys(districtCoords).find(
+      (k) => k.toLowerCase() === alert.district.toLowerCase()
+    );
+    if (key) return districtCoords[key];
+  }
+
   return null;
 }
 
 export default function NepalMap({ alerts }: Props) {
   return (
     <MapContainer
+      key="nepal-map"
       center={NEPAL_CENTER}
       zoom={7}
       maxBounds={NEPAL_BOUNDS}
       maxBoundsViscosity={0.8}
       minZoom={6}
-      style={{ height: "100%", width: "100%" }}
+      style={{ height: "100%", width: "100%", position: "relative", zIndex: 0 }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
