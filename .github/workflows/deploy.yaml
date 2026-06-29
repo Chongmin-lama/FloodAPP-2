@@ -20,10 +20,12 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
+            set -e
+
             cd ~/FloodAPP-2
 
-           git fetch origin
-           git reset --hard origin/master  
+            git fetch origin
+            git reset --hard origin/master
 
             npm install
 
