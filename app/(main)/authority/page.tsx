@@ -82,7 +82,10 @@ function VerificationQueue({
               className="grid gap-4 px-5 py-4 md:grid-cols-[1fr_auto] md:items-center"
             >
               <div>
-                <p className="font-semibold text-flood-navy">{report.location}</p>
+                <div className="flex items-center gap-2">
+                  <p className="font-semibold text-flood-navy">{report.location}</p>
+                  <span className="text-xs text-slate-400">— by <span className="font-semibold text-slate-600">{report.name ?? 'Guest'}</span></span>
+                </div>
                 <p className="mt-1 text-sm text-slate-500">{report.description}</p>
                 <div className="mt-3 flex flex-wrap items-center gap-2">
                   <span

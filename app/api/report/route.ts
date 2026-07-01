@@ -1,56 +1,41 @@
 import { getPool } from '@/lib/db';
 import { NextRequest, NextResponse } from 'next/server';
 
-
 export async function GET(req: NextRequest) {
     try {
         const userId = req.cookies.get('user_id')?.value;
         const role = req.cookies.get('user_role')?.value;
-        if (!userId || !role) {
-            return NextResponse.json(
-                { error: 'Not logged in' },
-                { status: 401 }
-            );
-        }
-
+        if (!userId || !role)
+            return NextResponse.json({ error: 'Not logged in' }, { status: 401 });
 
         const pool = await getPool();
-
         let result;
 
         if (role === 'admin' || role === 'authority') {
             result = await pool.request().query(`
-                SELECT *
-                FROM reports
-                ORDER BY created_at DESC
+                SELECT * FROM reports ORDER BY created_at DESC
             `);
         } else {
             result = await pool.request()
-                .input('user_id', userId)
+                .input('user_id', parseInt(userId))
                 .query(`
-                    SELECT *
-                    FROM reports
+                    SELECT * FROM reports
                     WHERE user_id = @user_id
                     ORDER BY created_at DESC
                 `);
         }
 
-
         return NextResponse.json(result.recordset);
 
     } catch (err: any) {
-        console.error(err);
-
-        return NextResponse.json(
-            { error: err.message },
-            { status: 500 }
-        );
+        return NextResponse.json({ error: err.message }, { status: 500 });
     }
 }
 
 export async function POST(req: NextRequest) {
     try {
         const userId = req.cookies.get('user_id')?.value;
+        const userName = req.cookies.get('user_name')?.value;
         const { district, location, severity, description, waterLevel, contactNumber } = await req.json();
 
         if (!location || !description)
@@ -58,7 +43,8 @@ export async function POST(req: NextRequest) {
 
         const pool = await getPool();
         await pool.request()
-            .input('user_id', userId || null)
+            .input('user_id', userId ? parseInt(userId) : null)
+            .input('name', userName ?? 'Guest')
             .input('location', location)
             .input('description', description)
             .input('severity', severity || 'medium')
@@ -66,12 +52,11 @@ export async function POST(req: NextRequest) {
             .input('contactNumber', contactNumber || null)
             .input('waterLevel', waterLevel || null)
             .query(`INSERT INTO reports 
-        (user_id, location, description, severity, status, District, ContactNumber, WaterLevel)
-        VALUES (@user_id, @location, @description, @severity, 'pending', @district, @contactNumber, @waterLevel)`);
+                (user_id, name, location, description, severity, status, District, ContactNumber, WaterLevel)
+                VALUES (@user_id, @name, @location, @description, @severity, 'pending', @district, @contactNumber, @waterLevel)`);
 
         return NextResponse.json({ message: 'Report submitted' }, { status: 201 });
     } catch (err: any) {
         return NextResponse.json({ error: err.message }, { status: 500 });
     }
 }
-
