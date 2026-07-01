@@ -1,7 +1,7 @@
 "use client";
 
 import { Field, nepalDistricts, Select } from "@/app/utils";
-import { ClipboardListIcon } from "lucide-react";
+import { Check, ClipboardListIcon } from "lucide-react";
 import { useState } from "react";
 
 interface ReportFormProps {
@@ -66,7 +66,7 @@ export default function ReportForm({ onSuccess }: ReportFormProps) {
 
       {success && (
         <div className="mt-3 rounded-lg bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3">
-          ✅ {success}
+          <Check size={14}/> {success}
         </div>
       )}
       {error && (

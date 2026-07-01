@@ -1,6 +1,6 @@
 FLOODGUARD — APP COMPLETION STATUS
 ====================================
-Date: June 29, 2026
+Date: June 30, 2026
 
 
 OVERALL STATUS: FUNCTIONALLY COMPLETE
@@ -14,142 +14,150 @@ WHAT IS FULLY DONE
 ------------------
 
 AUTHENTICATION
-  ✅ User registration (creates citizen account, bcrypt password hashing)
-  ✅ User login (email + password, sets httpOnly cookies)
-  ✅ Full logout (clears both server-side cookies AND localStorage)
-  ✅ Route protection via Next.js middleware (admin/authority/citizen routes)
-  ✅ Role-based redirects after login
+  - User registration (creates citizen account, bcrypt password hashing)
+  - User login (email + password, sets httpOnly cookies)
+  - Full logout (clears both server-side cookies AND localStorage)
+  - Route protection via Next.js middleware (admin/authority/citizen routes)
+  - Role-based redirects after login
 
 PUBLIC PAGES (no login required)
-  ✅ Homepage — live alert feed from DB, real stats (alerts, pending, resolved, total)
-  ✅ View Alerts page — all alerts with severity filter tabs, full card details
-  ✅ View Map page — interactive Nepal map, alert pins by district, color-coded by severity, hover tooltip
-  ✅ Report Flood page — guest report submission, prompts to register after success
-  ✅ Public navbar — active link highlighting, shared layout across all public pages
+  - Homepage — live alert feed from DB, real stats (alerts, pending, resolved, total)
+  - View Alerts page — all alerts with severity filter tabs, full card details
+  - View Map page — interactive Nepal map, alert pins by district, color-coded by severity, hover tooltip
+  - Report Flood page — guest report submission, prompts to register after success
+  - Public navbar with active link highlighting and mobile hamburger drawer
 
 LOGIN & REGISTER PAGES
-  ✅ Split-panel design (branded left + form right)
-  ✅ Show/hide password toggle
-  ✅ Error handling and loading states
+  - Split-panel design (branded left + form right)
+  - Show/hide password toggle
+  - Error handling and loading states
 
 CITIZEN DASHBOARD
-  ✅ 6 metric cards: Total, Pending, Verified, Dispatched, Resolved, Rejected
-  ✅ Recent reports list with severity and status badges
-  ✅ Recent alerts list
-  ✅ Quick action links
+  - 6 metric cards: Total, Pending, Verified, Dispatched, Resolved, Rejected
+  - Recent reports list with severity and status badges
+  - Recent alerts list
+  - Quick action links
 
 CITIZEN — REPORT FLOOD PAGE
-  ✅ Submit report with district, location, severity, water level, contact, description
-  ✅ View own report history in a table
-  ✅ Edit own pending reports (inline modal)
-  ✅ Delete own pending reports (confirm modal)
+  - Submit report with district, location, severity, water level, contact, description
+  - View own report history in a table
+  - Edit own pending reports (inline modal)
+  - Delete own pending reports (confirm modal, no browser popups)
 
 AUTHORITY DASHBOARD
-  ✅ Same 6 metric cards as citizen but across ALL reports
-  ✅ Recent reports and alerts
+  - Same 6 metric cards as citizen but across ALL reports
+  - Recent reports and alerts
 
 AUTHORITY — VERIFICATION QUEUE
-  ✅ View all submitted reports from all citizens
-  ✅ Verify pending reports
-  ✅ Reject pending reports
-  ✅ Dispatch verified reports (mark as responding)
-  ✅ Resolve verified/responding reports
-  ✅ Status pipeline: pending → verified → responding → resolved (or rejected)
+  - View all submitted reports from all citizens
+  - Verify pending reports
+  - Reject pending reports
+  - Dispatch verified reports (mark as responding)
+  - Resolve verified/responding reports
+  - Status pipeline: pending > verified > responding > resolved (or rejected)
 
 AUTHORITY & ADMIN — ALERTS PAGE
-  ✅ Publish official alerts (title, district, area, severity, description)
-  ✅ View all published alerts in table (title, description, district, area, severity, date)
-  ✅ Delete old/outdated alerts (confirm modal)
-  ✅ Citizens see alerts table read-only (no publish/delete)
+  - Publish official alerts (title, district, area, severity, description)
+  - View all published alerts in table (title, description, district, area, severity, date)
+  - Delete old/outdated alerts (confirm modal)
+  - Citizens see alerts table read-only (no publish/delete)
 
 ADMIN — USER MANAGEMENT
-  ✅ View all registered users
-  ✅ Change any user's role (citizen / authority / admin)
-  ✅ Reset any user's password to default "floodwatch" (confirm modal)
-  ✅ Delete a user and cascade-delete their reports (confirm modal, uses DB transaction)
+  - View all registered users
+  - Change any user's role (citizen / authority / admin)
+  - Reset any user's password to default "floodwatch" (confirm modal)
+  - Delete a user and cascade-delete their reports (confirm modal, uses DB transaction)
 
 ADMIN — REPORTS
-  ✅ View all reports from all users
-  ✅ Edit any pending report
-  ✅ Delete any pending report
+  - View all reports from all users
+  - Edit any pending report
+  - Delete any pending report
 
 PROFILE PAGE (all roles)
-  ✅ View own name, email, role, join date
-  ✅ Update name and email
-  ✅ Change password (requires current password verification)
+  - View own name, email, role, join date
+  - Update name and email
+  - Change password (requires current password verification)
 
 MAP
-  ✅ Interactive Leaflet map of Nepal
-  ✅ Alert pins placed by district (all 77 Nepal districts mapped)
-  ✅ Color-coded by severity (red=critical, orange=high, yellow=medium, blue=low)
-  ✅ Pin size scales with severity
-  ✅ Hover tooltip shows title, district, area, description, severity, date
-  ✅ Severity filter tabs
+  - Interactive Leaflet map of Nepal
+  - Alert pins placed by district (all 77 Nepal districts mapped with centroids)
+  - Color-coded by severity (red=critical, orange=high, yellow=medium, blue=low)
+  - Pin size scales with severity
+  - Hover tooltip shows title, district, area, description, severity, date
+  - Severity filter tabs
+  - Case-insensitive district matching as fallback
+  - Responsive height (350px mobile, 500px tablet, 600px desktop)
 
 UI / UX
-  ✅ Confirm modals everywhere (no browser confirm() or alert() popups)
-  ✅ Sidebar nav with active link highlighting
-  ✅ Role-adaptive sidebar (different nav items per role)
-  ✅ Responsive layout
+  - Confirm modals everywhere (no browser confirm() or alert() popups)
+  - Sidebar nav with active link highlighting
+  - Role-adaptive sidebar (different nav items per role)
+  - Mobile hamburger drawer for both public nav and dashboard sidebar
+  - Responsive layout across all pages
+  - No emoji icons — all icons use Lucide React
 
-DATABASE
-  ✅ users table
-  ✅ reports table
-  ✅ flood_alerts table
-  ✅ Public stats endpoint (no auth, returns counts only)
+
+ADDED SINCE LAST STATUS UPDATE
+-------------------------------
+  - Profile page for all users (update name, email, password)
+  - Full logout now clears server-side httpOnly cookies (previously only cleared localStorage)
+  - Mobile hamburger menu added to dashboard sidebar (was hidden on mobile, now accessible)
+  - Mobile hamburger menu added to public navbar
+  - Delete alerts feature for authority/admin
+  - Confirm modal component used everywhere (replaced all browser confirm/alert calls)
+  - Public stats endpoint (/api/stats) for homepage counts — no auth required
+  - Case-insensitive district matching on the map
+  - Map height is now responsive
+  - All emoji icons removed and replaced with Lucide React icons
 
 
 WHAT IS NOT DONE / KNOWN GAPS
 ------------------------------
 
 MAP ACCURACY
-  ⚠️  Map pins are placed at district centroids, not exact GPS coordinates.
-      When an authority publishes an alert with a district selected, the pin
-      appears at the center of that district — not the exact affected spot.
-      To fix this properly, GPS coordinates would need to be captured when
-      reporting (browser geolocation) and stored in the DB.
+  Map pins are placed at district centroids, not exact GPS coordinates.
+  When an authority publishes an alert with a district selected, the pin
+  appears at the center of that district, not the exact affected spot.
+  To fix this properly, GPS coordinates would need to be captured when
+  reporting (browser geolocation) and stored in the DB.
 
 GUEST REPORTS ON MAP
-  ⚠️  Reports submitted by guests (or logged-in citizens) do not appear on
-      the map. Currently the map only shows official alerts published by
-      authorities. Showing citizen reports as a separate pin layer was
-      planned but not implemented.
+  Reports submitted by guests or logged-in citizens do not appear on the map.
+  Currently the map only shows official alerts published by authorities.
+  Showing citizen reports as a separate pin layer was planned but not implemented.
 
 REAL-TIME UPDATES
-  ⚠️  The app uses manual fetch on page load. There is no auto-refresh,
-      WebSocket, or polling. If someone submits a report while an authority
-      is viewing the queue, they won't see it until they refresh.
+  The app uses manual fetch on page load. There is no auto-refresh,
+  WebSocket, or polling. If someone submits a report while an authority
+  is viewing the queue, they won't see it until they refresh.
 
 EMAIL / SMS NOTIFICATIONS
-  ⚠️  No notifications are sent when an alert is published or a report
-      status changes. This was noted as a future feature.
+  No notifications are sent when an alert is published or a report
+  status changes. Noted as a future feature.
 
 PASSWORD RESET VIA EMAIL
-  ⚠️  There is no "Forgot Password" flow. The only way to reset a password
-      is for an admin to do it manually from the Users panel.
-
-MOBILE NAV
-  ⚠️  The sidebar is hidden on mobile (lg:block). There is no hamburger menu
-      or mobile drawer for the dashboard navigation.
+  There is no "Forgot Password" flow. The only way to reset a password
+  is for an admin to do it manually from the Users panel.
 
 REPORT STATUS FOR GUEST SUBMISSIONS
-  ⚠️  Guest reports (submitted without an account) cannot be tracked.
-      The app correctly prompts guests to register after submitting, but
-      there is no way to link a previously submitted guest report to a
-      newly created account.
+  Guest reports cannot be tracked after submission. The app prompts guests
+  to register after submitting, but there is no way to link a previously
+  submitted guest report to a newly created account.
 
 PAGINATION
-  ⚠️  All tables load all records at once. If the database grows large,
-      reports and user tables will become slow. No pagination implemented.
+  All tables load all records at once. If the database grows large,
+  reports and user tables will become slow. No pagination implemented.
 
 
 SUMMARY
 -------
 The application covers all the core requirements of a flood incident reporting
 and community response platform. The three-role system (citizen, authority, admin)
-is fully functional. The public can view live alerts and the map without logging in.
-Citizens can report and track their incidents. Authorities can manage the full
-response pipeline. Admins have complete control over users and content.
+is fully functional. The public can view live alerts and the interactive map
+without logging in, and can submit reports as guests. Citizens can report and
+track their incidents. Authorities can manage the full response pipeline and
+publish official alerts. Admins have complete control over users and content.
+Both the dashboard and public nav are now mobile-friendly with slide-in drawers.
 
-The gaps above are enhancements and polish items — none of them break the
+The gaps above are enhancements and polish items. None of them break the
 core functionality of the app.

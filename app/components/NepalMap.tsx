@@ -1,6 +1,7 @@
 "use client";
 
 import L from "leaflet";
+import { MapPin } from "lucide-react";
 import { MapContainer, TileLayer, CircleMarker, Tooltip } from "react-leaflet";
 
 // fix default icon paths broken by webpack
@@ -172,8 +173,9 @@ export default function NepalMap({ alerts }: Props) {
               <div className="text-xs min-w-[160px] max-w-[220px]">
                 <p className="font-bold text-gray-900 text-sm mb-1">{alert.title ?? alert.area}</p>
                 {(alert.district || alert.area) && (
-                  <p className="text-gray-500 mb-1">
-                    📍 {[alert.district, alert.area].filter(Boolean).join(" · ")}
+                  <p className="text-gray-500 mb-1 flex items-center gap-1">
+                    <MapPin size={11} className="shrink-0" />
+                    {[alert.district, alert.area].filter(Boolean).join(" · ")}
                   </p>
                 )}
                 <p className="text-gray-700 leading-snug">{alert.description}</p>
