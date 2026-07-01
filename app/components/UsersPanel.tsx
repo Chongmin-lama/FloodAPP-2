@@ -46,7 +46,7 @@ export default function UsersPanel() {
     const name = modal.name;
     await fetch(`/api/admin/users/${modal.id}`, { method: "PATCH" });
     setModal(null);
-    setResetSuccess(`Password reset to "floodwatch" for ${name}`);
+    setResetSuccess(`Password reset to "FloodGuard" for ${name}`);
     setTimeout(() => setResetSuccess(""), 4000);
   };
 

@@ -30,7 +30,7 @@ export async function PUT(
   }
 }
 
-// PATCH - reset password to default "floodwatch"
+// PATCH - reset password to default "floodguard"
 export async function PATCH(
   req: NextRequest,
   { params }: { params: { id: string } },
@@ -40,7 +40,7 @@ export async function PATCH(
     if (role !== "admin")
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
-    const hashed = await bcrypt.hash("floodwatch", 10);
+    const hashed = await bcrypt.hash("floodguard", 10);
 
     const pool = await getPool();
     await pool
